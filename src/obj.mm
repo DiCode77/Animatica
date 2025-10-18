@@ -5,9 +5,33 @@
 //  Created by DiCode77.
 //
 
-#import <Foundation/Foundation.h>
-#import <Cocoa/Cocoa.h>
+#import "objm.h"
 #import "obj.hpp"
+
+@implementation CustomWindowDelegate {
+    ModernizeWindow *m_window;
+}
+
+- (instancetype)initWithModernizeWindow:(ModernizeWindow*)md_window {
+    self = [super init];
+    if (self) {
+        if (md_window != nil) {
+            m_window = static_cast<ModernizeWindow*>(md_window);
+        }
+    }
+    return self;
+}
+
+- (void)WindowReduction:(id)sender{
+    if (m_window != nil)
+        m_window->CallWindowReduction();
+}
+
+- (void)WindowEnlargement:(id)sender{
+    if (m_window != nil)
+        m_window->CallWindowEnlargement();
+}
+@end
 
 void ModernizeWindow::ConnectFrame(WXWidget frame){
     NSView *nsView = (NSView*)frame;
@@ -27,8 +51,62 @@ void ModernizeWindow::NoColorWindow(){
     this->nsWindow.movableByWindowBackground = YES;
 }
 
+void ModernizeWindow::TopWindow(){
+    [this->nsWindow setLevel:NSModalPanelWindowLevel];
+}
+
+void ModernizeWindow::HideTitleText(){
+    [this->nsWindow setTitleVisibility:NSWindowTitleHidden];
+}
+
+void ModernizeWindow::SetDelegateReduction(std::function<void()> func){
+    SetDelegate();
+    
+    if (this->minimizeButton == nullptr){
+        this->minimizeButton = [this->nsWindow standardWindowButton:NSWindowMiniaturizeButton];
+        [minimizeButton setTarget:static_cast<CustomWindowDelegate*>(this->CustomWindowDel)];
+        [minimizeButton setAction:@selector(WindowReduction:)];
+        this->c_windowReduc = func;
+    }
+}
+
+void ModernizeWindow::SetDelegateEnlargement(std::function<void()> func){
+    SetDelegate();
+    
+    if (this->zoomButton == nullptr){
+        this->zoomButton     = [this->nsWindow standardWindowButton:NSWindowZoomButton];
+        [zoomButton setTarget:static_cast<CustomWindowDelegate*>(this->CustomWindowDel)];
+        [zoomButton setAction:@selector(WindowEnlargement:)];
+        this->c_windowEnlar = func;
+        
+    }
+}
+
+void ModernizeWindow::CallWindowReduction(){
+    if (this->c_windowReduc)
+        this->c_windowReduc();
+}
+
+void ModernizeWindow::CallWindowEnlargement(){
+    if (this->c_windowEnlar)
+        this->c_windowEnlar();
+}
+
+ModernizeWindow::~ModernizeWindow(){
+    if (this->CustomWindowDel != nullptr){
+        [static_cast<CustomWindowDelegate*>(this->CustomWindowDel) release];
+        this->CustomWindowDel = nullptr;
+    }
+}
+
 void ModernizeWindow::_conFrame(NSWindow *window){
     this->nsWindow = window;
+}
+
+void ModernizeWindow::SetDelegate(){
+    if (this->CustomWindowDel == nullptr){
+        this->CustomWindowDel = static_cast<void*>([[CustomWindowDelegate alloc] initWithModernizeWindow:this]);
+    }
 }
 
 void Animate::ConnectFrame(WXWidget frame){
@@ -91,4 +169,17 @@ void Animate::Show(){
 
 void Animate::Hide(){
     [this->imageView setHidden:YES];
+}
+
+Animate::~Animate(){
+    if (this->image != nil){
+        [this->image release];
+        this->image = nil;
+    }
+    
+    if (this->imageView != nil){
+        [this->imageView removeFromSuperview]; // delete gif
+        [this->imageView release]; // free memory
+        this->imageView = nil;
+    }
 }

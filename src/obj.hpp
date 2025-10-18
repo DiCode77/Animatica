@@ -15,17 +15,34 @@
   class NSImageView;
 #endif
 
-#include "Animatica.hpp"
-
+#include <wx/wx.h>
+#include <functional>
 
 class ModernizeWindow{
-    NSWindow *nsWindow;
+    NSButton *minimizeButton = nullptr;
+    NSButton *zoomButton = nullptr;
+public:
+    NSWindow *nsWindow = nullptr;
+    void *CustomWindowDel = nullptr;
+public:
+    std::function<void()> c_windowReduc = NULL;
+    std::function<void()> c_windowEnlar = NULL;
+    
 public:
     void ConnectFrame(WXWidget);
     void NoColorWindow();
+    void TopWindow();
+    void HideTitleText();
+    void SetDelegateReduction(std::function<void()>);
+    void SetDelegateEnlargement(std::function<void()>);
     
+    void CallWindowReduction();
+    void CallWindowEnlargement();
+    
+    ~ModernizeWindow();
 private:
     void _conFrame(NSWindow*);
+    void SetDelegate();
 };
 
 class Animate{
@@ -39,6 +56,8 @@ public:
     void AutoResizeGifOn();
     void Show();
     void Hide();
+    
+    ~Animate();
     
 private:
     void _conFrame(NSWindow*);
