@@ -17,6 +17,12 @@
 
 #include <wx/wx.h>
 #include <functional>
+#include <unordered_map>
+#include <utility>
+
+constexpr const char *TITLE_BAR_CLOSE_BUTTON = "Close";
+constexpr const char *TITLE_BAR_MINIM_BUTTON = "Minimaze";
+constexpr const char *TITLE_BAR_ZOOM_BUTTON  = "Zoom";
 
 class ModernizeWindow{
     NSButton *minimizeButton = nullptr;
@@ -25,31 +31,30 @@ class ModernizeWindow{
 public:
     NSWindow *nsWindow = nullptr;
     void *CustomWindowDel = nullptr;
-public:
-    std::function<void()> c_windowReduc = NULL;
-    std::function<void()> c_windowEnlar = NULL;
+    std::unordered_map<std::string, std::function<void()>> um_funcv;
     
 public:
     void ConnectFrame(WXWidget);
     void NoColorWindow();
     void TopWindow();
     void HideTitleText();
-    void SetDelegateReduction(std::function<void()>);
-    void SetDelegateEnlargement(std::function<void()>);
     
-    void TitleBarButtonsInit();
-    
-    void CallWindowReduction();
-    void CallWindowEnlargement();
+    void InitTitleBarButtons();
+    void SetDelegateButtonClose(std::function<void()>);
+    void SetDelegateButtonMinimaze(std::function<void()>);
+    void SetDelegateButtonZoom(std::function<void()>);
     
     void TitleBarAllButtonShow();
     void TitleBarAllButtonHide();
     
     ~ModernizeWindow();
+    
+    void _CellUmFunc(std::string);
 private:
     void _conFrame(NSWindow*);
-    void MakeDelegation();
-    void HideAllButtonsInTitleBar(bool);
+    void _MakeDelegation();
+    void _InitUMapFunc(std::pair<std::string, std::function<void()>>);
+    void _HideAllButtonsInTitleBar(bool);
 };
 
 class Animate{

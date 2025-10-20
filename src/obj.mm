@@ -22,14 +22,19 @@
     return self;
 }
 
-- (void)WindowReduction:(id)sender{
+- (void)WindowCloseWindow:(id)sender{
     if (m_window != nil)
-        m_window->CallWindowReduction();
+        m_window->_CellUmFunc(TITLE_BAR_CLOSE_BUTTON);
 }
 
-- (void)WindowEnlargement:(id)sender{
+- (void)WindowMinimaze:(id)sender{
     if (m_window != nil)
-        m_window->CallWindowEnlargement();
+        m_window->_CellUmFunc(TITLE_BAR_MINIM_BUTTON);
+}
+
+- (void)WindowZoom:(id)sender{
+    if (m_window != nil)
+        m_window->_CellUmFunc(TITLE_BAR_ZOOM_BUTTON);
 }
 @end
 
@@ -59,50 +64,47 @@ void ModernizeWindow::HideTitleText(){
     [this->nsWindow setTitleVisibility:NSWindowTitleHidden];
 }
 
-void ModernizeWindow::SetDelegateReduction(std::function<void()> func){
-    MakeDelegation();
-    
-    if (this->minimizeButton != nil){
-        [minimizeButton setTarget:static_cast<CustomWindowDelegate*>(this->CustomWindowDel)];
-        [minimizeButton setAction:@selector(WindowReduction:)];
-        this->c_windowReduc = func;
-    }
-}
-
-void ModernizeWindow::SetDelegateEnlargement(std::function<void()> func){
-    MakeDelegation();
-    
-    if (this->zoomButton != nil){
-        [zoomButton setTarget:static_cast<CustomWindowDelegate*>(this->CustomWindowDel)];
-        [zoomButton setAction:@selector(WindowEnlargement:)];
-        this->c_windowEnlar = func;
-    }
-}
-
-void ModernizeWindow::TitleBarButtonsInit(){
+void ModernizeWindow::InitTitleBarButtons(){
     if (this->nsWindow != nil){
         this->closeButton    = [this->nsWindow standardWindowButton:NSWindowCloseButton];
         this->minimizeButton = [this->nsWindow standardWindowButton:NSWindowMiniaturizeButton];
         this->zoomButton     = [this->nsWindow standardWindowButton:NSWindowZoomButton];
+                
+        _MakeDelegation();
     }
 }
 
-void ModernizeWindow::CallWindowReduction(){
-    if (this->c_windowReduc)
-        this->c_windowReduc();
+void ModernizeWindow::SetDelegateButtonClose(std::function<void()> func){
+    if (this->closeButton != nil && this->CustomWindowDel != nil){
+        [this->closeButton setTarget:static_cast<CustomWindowDelegate*>(this->CustomWindowDel)];
+        [this->closeButton setAction:@selector(WindowCloseWindow:)];
+        _InitUMapFunc(std::make_pair(TITLE_BAR_CLOSE_BUTTON, func));
+        
+    }
 }
 
-void ModernizeWindow::CallWindowEnlargement(){
-    if (this->c_windowEnlar)
-        this->c_windowEnlar();
+void ModernizeWindow::SetDelegateButtonMinimaze(std::function<void()> func){
+    if (this->minimizeButton != nil && this->CustomWindowDel != nil){
+        [this->minimizeButton setTarget:static_cast<CustomWindowDelegate*>(this->CustomWindowDel)];
+        [this->minimizeButton setAction:@selector(WindowMinimaze:)];
+        _InitUMapFunc(std::make_pair(TITLE_BAR_MINIM_BUTTON, func));
+    }
+}
+
+void ModernizeWindow::SetDelegateButtonZoom(std::function<void()> func){
+    if (this->zoomButton != nil && this->CustomWindowDel != nil){
+        [this->zoomButton setTarget:static_cast<CustomWindowDelegate*>(this->CustomWindowDel)];
+        [this->zoomButton setAction:@selector(WindowZoom:)];
+        _InitUMapFunc(std::make_pair(TITLE_BAR_ZOOM_BUTTON, func));
+    }
 }
 
 void ModernizeWindow::TitleBarAllButtonShow(){
-    HideAllButtonsInTitleBar(YES);
+    _HideAllButtonsInTitleBar(NO);
 }
 
 void ModernizeWindow::TitleBarAllButtonHide(){
-    HideAllButtonsInTitleBar(NO);
+    _HideAllButtonsInTitleBar(YES);
 }
 
 ModernizeWindow::~ModernizeWindow(){
@@ -112,17 +114,27 @@ ModernizeWindow::~ModernizeWindow(){
     }
 }
 
+void ModernizeWindow::_CellUmFunc(std::string name){
+    if (this->um_funcv.contains(name)){
+        this->um_funcv.at(name)();
+    }
+}
+
 void ModernizeWindow::_conFrame(NSWindow *window){
     this->nsWindow = window;
 }
 
-void ModernizeWindow::MakeDelegation(){
+void ModernizeWindow::_MakeDelegation(){
     if (this->CustomWindowDel == nullptr){
         this->CustomWindowDel = static_cast<void*>([[CustomWindowDelegate alloc] initWithModernizeWindow:this]);
     }
 }
 
-void ModernizeWindow::HideAllButtonsInTitleBar(bool isStatus){
+void ModernizeWindow::_InitUMapFunc(std::pair<std::string, std::function<void()>> func){
+    this->um_funcv.insert(func);
+}
+
+void ModernizeWindow::_HideAllButtonsInTitleBar(bool isStatus){
     if (this->closeButton != nil)
         [this->closeButton setHidden:isStatus];
     if (this->minimizeButton != nil)
