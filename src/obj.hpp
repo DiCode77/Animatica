@@ -21,6 +21,7 @@
 class ModernizeWindow{
     NSButton *minimizeButton = nullptr;
     NSButton *zoomButton = nullptr;
+    NSButton *closeButton = nullptr;
 public:
     NSWindow *nsWindow = nullptr;
     void *CustomWindowDel = nullptr;
@@ -36,13 +37,19 @@ public:
     void SetDelegateReduction(std::function<void()>);
     void SetDelegateEnlargement(std::function<void()>);
     
+    void TitleBarButtonsInit();
+    
     void CallWindowReduction();
     void CallWindowEnlargement();
+    
+    void TitleBarAllButtonShow();
+    void TitleBarAllButtonHide();
     
     ~ModernizeWindow();
 private:
     void _conFrame(NSWindow*);
-    void SetDelegate();
+    void MakeDelegation();
+    void HideAllButtonsInTitleBar(bool);
 };
 
 class Animate{

@@ -60,10 +60,9 @@ void ModernizeWindow::HideTitleText(){
 }
 
 void ModernizeWindow::SetDelegateReduction(std::function<void()> func){
-    SetDelegate();
+    MakeDelegation();
     
-    if (this->minimizeButton == nullptr){
-        this->minimizeButton = [this->nsWindow standardWindowButton:NSWindowMiniaturizeButton];
+    if (this->minimizeButton != nil){
         [minimizeButton setTarget:static_cast<CustomWindowDelegate*>(this->CustomWindowDel)];
         [minimizeButton setAction:@selector(WindowReduction:)];
         this->c_windowReduc = func;
@@ -71,14 +70,20 @@ void ModernizeWindow::SetDelegateReduction(std::function<void()> func){
 }
 
 void ModernizeWindow::SetDelegateEnlargement(std::function<void()> func){
-    SetDelegate();
+    MakeDelegation();
     
-    if (this->zoomButton == nullptr){
-        this->zoomButton     = [this->nsWindow standardWindowButton:NSWindowZoomButton];
+    if (this->zoomButton != nil){
         [zoomButton setTarget:static_cast<CustomWindowDelegate*>(this->CustomWindowDel)];
         [zoomButton setAction:@selector(WindowEnlargement:)];
         this->c_windowEnlar = func;
-        
+    }
+}
+
+void ModernizeWindow::TitleBarButtonsInit(){
+    if (this->nsWindow != nil){
+        this->closeButton    = [this->nsWindow standardWindowButton:NSWindowCloseButton];
+        this->minimizeButton = [this->nsWindow standardWindowButton:NSWindowMiniaturizeButton];
+        this->zoomButton     = [this->nsWindow standardWindowButton:NSWindowZoomButton];
     }
 }
 
@@ -92,6 +97,14 @@ void ModernizeWindow::CallWindowEnlargement(){
         this->c_windowEnlar();
 }
 
+void ModernizeWindow::TitleBarAllButtonShow(){
+    HideAllButtonsInTitleBar(YES);
+}
+
+void ModernizeWindow::TitleBarAllButtonHide(){
+    HideAllButtonsInTitleBar(NO);
+}
+
 ModernizeWindow::~ModernizeWindow(){
     if (this->CustomWindowDel != nullptr){
         [static_cast<CustomWindowDelegate*>(this->CustomWindowDel) release];
@@ -103,10 +116,19 @@ void ModernizeWindow::_conFrame(NSWindow *window){
     this->nsWindow = window;
 }
 
-void ModernizeWindow::SetDelegate(){
+void ModernizeWindow::MakeDelegation(){
     if (this->CustomWindowDel == nullptr){
         this->CustomWindowDel = static_cast<void*>([[CustomWindowDelegate alloc] initWithModernizeWindow:this]);
     }
+}
+
+void ModernizeWindow::HideAllButtonsInTitleBar(bool isStatus){
+    if (this->closeButton != nil)
+        [this->closeButton setHidden:isStatus];
+    if (this->minimizeButton != nil)
+        [this->minimizeButton setHidden:isStatus];
+    if (this->zoomButton != nil)
+        [this->zoomButton setHidden:isStatus];
 }
 
 void Animate::ConnectFrame(WXWidget frame){
