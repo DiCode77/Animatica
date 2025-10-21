@@ -57,11 +57,20 @@ void ModernizeWindow::NoColorWindow(){
 }
 
 void ModernizeWindow::TopWindow(){
-    [this->nsWindow setLevel:NSModalPanelWindowLevel];
+    if (this->nsWindow != nil){
+        [this->nsWindow makeKeyAndOrderFront:nil];
+        [this->nsWindow setLevel:NSModalPanelWindowLevel];
+    }
 }
 
 void ModernizeWindow::HideTitleText(){
-    [this->nsWindow setTitleVisibility:NSWindowTitleHidden];
+    if (this->nsWindow != nil)
+        [this->nsWindow setTitleVisibility:NSWindowTitleHidden];
+}
+
+void ModernizeWindow::SetTitleText(wxString name){
+    if (this->nsWindow != nil)
+        [this->nsWindow setTitle:[NSString stringWithUTF8String:name.utf8_str()]];
 }
 
 void ModernizeWindow::InitTitleBarButtons(){
@@ -105,6 +114,23 @@ void ModernizeWindow::TitleBarAllButtonShow(){
 
 void ModernizeWindow::TitleBarAllButtonHide(){
     _HideAllButtonsInTitleBar(YES);
+}
+
+void ModernizeWindow::HideButtonInTBar(const char *name, bool isStatus){
+    if (!std::strcmp(TITLE_BAR_CLOSE_BUTTON, name)){
+        if (this->closeButton != nil)
+            [this->closeButton setHidden:isStatus];
+    }
+    else if (!std::strcmp(TITLE_BAR_MINIM_BUTTON, name)){
+        if (this->minimizeButton != nil)
+            [this->minimizeButton setHidden:isStatus];
+    }
+    else if (!std::strcmp(TITLE_BAR_ZOOM_BUTTON, name)){
+        if (this->zoomButton != nil)
+            [this->zoomButton setHidden:isStatus];
+    }
+    else{
+    }
 }
 
 ModernizeWindow::~ModernizeWindow(){

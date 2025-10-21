@@ -38,6 +38,7 @@ public:
     void NoColorWindow();
     void TopWindow();
     void HideTitleText();
+    void SetTitleText(wxString);
     
     void InitTitleBarButtons();
     void SetDelegateButtonClose(std::function<void()>);
@@ -46,6 +47,7 @@ public:
     
     void TitleBarAllButtonShow();
     void TitleBarAllButtonHide();
+    void HideButtonInTBar(const char*, bool);
     
     ~ModernizeWindow();
     
