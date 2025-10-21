@@ -9,13 +9,14 @@ project(Animatica)
 set(SRC "${CMAKE_SOURCE_DIR}/src")
 
 file(GLOB IMAGE_FILES CONFIGURE_DEPENDS 
-                    "${CMAKE_SOURCE_DIR}/resources/Animatica.icns")
+                    "${CMAKE_SOURCE_DIR}/resources/Animatica.icns"
+                    "${CMAKE_SOURCE_DIR}/resources/*.gif")
 
 include_directories(${SRC}) 
 
 find_package(wxWidgets CONFIG REQUIRED)
 
-file(GLOB SRC_FILES "${SRC}/*.cpp" "${SRC}/*.h" "${SRC}/*.hpp")
+file(GLOB SRC_FILES "${SRC}/*.cpp" "${SRC}/*.h" "${SRC}/*.hpp" "${SRC}/*.mm")
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SRC_FILES}) 
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 20 

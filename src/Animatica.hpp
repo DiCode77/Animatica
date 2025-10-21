@@ -10,10 +10,37 @@
 
 #include <iostream>
 #include <wx/wx.h>
+#include <wx/filename.h>
+#include <wx/stdpaths.h>
+
+#include <vector>
+
+#include "obj.hpp"
 
 class Animatica : public wxFrame{
+    ModernizeWindow *mod_main_window = nullptr;
+    Animate         *animate_gif = nullptr;
+    std::vector<wxString> vec_name_gif;
+    short pos_gif = 0;
+    bool doubleClickIsStatus = true;
+    
 public:
     Animatica(const wxString title, const wxPoint point, const wxSize size);
+    
+    void ChangeSalutation();
+    void ChangeDeployment();
+    
+protected:
+    void DoubleClickingTitleBar(wxMaximizeEvent&);
+    
+    ~Animatica();
+    
+private:
+    void OnActivate(wxActivateEvent&);
+    wxString GetFullDirPath(const char*, const char*, const char*);
+    void SetInitVectorGif();
+    
 };
 
 #endif /* Animatica_hpp */
+

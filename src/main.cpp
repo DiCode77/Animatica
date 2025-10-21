@@ -8,7 +8,7 @@
 #include "main.hpp"
 
 bool MyApp::OnInit() {
-    Animatica *prog = new Animatica(wxT("Animatica"), wxDefaultPosition, wxSize(400, 500));
+    Animatica *prog = new Animatica(wxT("Animatica"), wxDefaultPosition, wxSize(200, 300));
     prog->Show(true);
     return true;
 }
