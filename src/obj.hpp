@@ -39,6 +39,8 @@ public:
     void TopWindow();
     void HideTitleText();
     void SetTitleText(wxString);
+    void SetMaxSizeWindow(wxSize);
+    void SetMinSizeWindow(wxSize);
     
     void InitTitleBarButtons();
     void SetDelegateButtonClose(std::function<void()>);

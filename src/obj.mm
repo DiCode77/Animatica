@@ -73,6 +73,17 @@ void ModernizeWindow::SetTitleText(wxString name){
         [this->nsWindow setTitle:[NSString stringWithUTF8String:name.utf8_str()]];
 }
 
+void ModernizeWindow::SetMaxSizeWindow(wxSize size){
+    if (this->nsWindow != nil){
+        [this->nsWindow setContentMaxSize:NSMakeSize(size.x, size.y)];
+    }
+}
+void ModernizeWindow::SetMinSizeWindow(wxSize size){
+    if (this->nsWindow != nil){
+        [this->nsWindow setContentMinSize:NSMakeSize(size.x, size.y)];
+    }
+}
+
 void ModernizeWindow::InitTitleBarButtons(){
     if (this->nsWindow != nil){
         this->closeButton    = [this->nsWindow standardWindowButton:NSWindowCloseButton];
