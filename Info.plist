@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -14,7 +13,7 @@
     <key>CFBundleIconFile</key>
 	<string>Animatica.icns</string>
     <key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<string>com.dicode77.animatica</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLongVersionString</key>
@@ -48,7 +47,7 @@
 	<key>DTXcodeBuild</key>
 	<string>17A5305k</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>26.0</string>
+	<string>14.0</string>
     <key>NSHighResolutionCapable</key>
 	<true/>
 	<key>NSPrincipalClass</key>
