@@ -21,6 +21,7 @@ Animatica::Animatica(const wxString title, const wxPoint point, const wxSize siz
     this->mod_main_window->InitTitleBarButtons();
     this->mod_main_window->SetDelegateButtonMinimaze(std::bind(&Animatica::ChangeSalutation, this));
     this->mod_main_window->SetDelegateButtonZoom(std::bind(&Animatica::ChangeDeployment, this));
+    this->mod_main_window->SetDelegateFuncDoubleClick(std::bind(&Animatica::ChangeButtonsStatus, this));
 
     this->animate_gif = new Animate();
     this->animate_gif->ConnectFrame(this->GetHandle());
@@ -80,6 +81,10 @@ void Animatica::ChangeDeployment(){
     this->animate_gif->loadGif(GetFullDirPath("resources", vec_name_gif[this->pos_gif], "gif"));
 }
 
+void Animatica::ChangeButtonsStatus(){
+    wxMaximizeEvent state = wxMaximizeEvent();
+    DoubleClickingTitleBar(state);
+}
 
 void Animatica::DoubleClickingTitleBar(wxMaximizeEvent&){
     if (this->doubleClickIsStatus){

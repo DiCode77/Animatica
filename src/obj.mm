@@ -18,8 +18,21 @@
         if (md_window != nil) {
             m_window = static_cast<ModernizeWindow*>(md_window);
         }
+        self.lastVal = [self GetTimeNow];
     }
     return self;
+}
+
+- (NSInteger)GetDoubleClock{
+    return [[NSApp currentEvent] clickCount];
+}
+
+- (CFAbsoluteTime) GetTimeNow{
+    return CFAbsoluteTimeGetCurrent() * 1000;
+}
+
+- (NSTimeInterval) GetDoubleClickInterval{
+    return [NSEvent doubleClickInterval] * 1000;
 }
 
 - (void)WindowCloseWindow:(id)sender{
@@ -28,8 +41,17 @@
 }
 
 - (void)WindowMinimaze:(id)sender{
-    if (m_window != nil)
-        m_window->_CellUmFunc(TITLE_BAR_MINIM_BUTTON);
+    NSInteger res_del = [self GetTimeNow] - self.lastVal;
+    
+    if (res_del > [self GetDoubleClickInterval] && [self GetDoubleClock] == 2){ // double click
+        m_window->_CellUmFunc(DOUBLE_CLICK_MINIMIZE);
+    }
+    else{ // one click
+        if (m_window != nil){
+            m_window->_CellUmFunc(TITLE_BAR_MINIM_BUTTON);
+        }
+    }
+    self.lastVal = [self GetTimeNow];
 }
 
 - (void)WindowZoom:(id)sender{
@@ -84,6 +106,11 @@ void ModernizeWindow::SetMinSizeWindow(wxSize size){
     }
 }
 
+wxString ModernizeWindow::GetStateDoubleClickAction(){
+    wxString str = [[[NSUserDefaults standardUserDefaults] stringForKey:@"AppleActionOnDoubleClick"] UTF8String];
+    return (str.length()) ? str : wxString("");
+}
+
 void ModernizeWindow::InitTitleBarButtons(){
     if (this->nsWindow != nil){
         this->closeButton    = [this->nsWindow standardWindowButton:NSWindowCloseButton];
@@ -116,6 +143,12 @@ void ModernizeWindow::SetDelegateButtonZoom(std::function<void()> func){
         [this->zoomButton setTarget:static_cast<CustomWindowDelegate*>(this->CustomWindowDel)];
         [this->zoomButton setAction:@selector(WindowZoom:)];
         _InitUMapFunc(std::make_pair(TITLE_BAR_ZOOM_BUTTON, func));
+    }
+}
+
+void ModernizeWindow::SetDelegateFuncDoubleClick(std::function<void()> func){
+    if (this->CustomWindowDel != nil){
+        _InitUMapFunc(std::make_pair(DOUBLE_CLICK_MINIMIZE, func));
     }
 }
 

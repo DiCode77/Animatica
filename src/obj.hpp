@@ -24,6 +24,11 @@ constexpr const char *TITLE_BAR_CLOSE_BUTTON = "Close";
 constexpr const char *TITLE_BAR_MINIM_BUTTON = "Minimaze";
 constexpr const char *TITLE_BAR_ZOOM_BUTTON  = "Zoom";
 
+constexpr const char *DOUBLE_CLICK_FILL     = "Fill";
+constexpr const char *DOUBLE_CLICK_MAXIMIZE = "Maximize";
+constexpr const char *DOUBLE_CLICK_MINIMIZE = "Minimize";
+constexpr const char *DOUBLE_CLICK_NONE     = "None";
+
 class ModernizeWindow{
     NSButton *minimizeButton = nullptr;
     NSButton *zoomButton = nullptr;
@@ -41,11 +46,13 @@ public:
     void SetTitleText(wxString);
     void SetMaxSizeWindow(wxSize);
     void SetMinSizeWindow(wxSize);
+    wxString GetStateDoubleClickAction();
     
     void InitTitleBarButtons();
     void SetDelegateButtonClose(std::function<void()>);
     void SetDelegateButtonMinimaze(std::function<void()>);
     void SetDelegateButtonZoom(std::function<void()>);
+    void SetDelegateFuncDoubleClick(std::function<void()>);
     
     void TitleBarAllButtonShow();
     void TitleBarAllButtonHide();

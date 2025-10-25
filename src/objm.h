@@ -13,6 +13,7 @@
 #import <Cocoa/Cocoa.h>
 
 @interface CustomWindowDelegate : NSObject <NSWindowDelegate>
+@property (nonatomic, assign) CFTimeInterval lastVal;
 @end
 
 #endif

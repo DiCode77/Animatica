@@ -22,13 +22,14 @@ class Animatica : public wxFrame{
     Animate         *animate_gif = nullptr;
     std::vector<wxString> vec_name_gif;
     short pos_gif = 0;
-    bool doubleClickIsStatus = true;
+    bool doubleClickIsStatus = false;
     
 public:
     Animatica(const wxString title, const wxPoint point, const wxSize size);
     
     void ChangeSalutation();
     void ChangeDeployment();
+    void ChangeButtonsStatus();
     
 protected:
     void DoubleClickingTitleBar(wxMaximizeEvent&);
