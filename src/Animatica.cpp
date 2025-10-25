@@ -25,8 +25,7 @@ Animatica::Animatica(const wxString title, const wxPoint point, const wxSize siz
     this->animate_gif = new Animate();
     this->animate_gif->ConnectFrame(this->GetHandle());
     this->animate_gif->loadGif(GetFullDirPath("resources", vec_name_gif[this->pos_gif], "gif"));
-
-
+    
     this->Bind(wxEVT_MAXIMIZE, &Animatica::DoubleClickingTitleBar, this);
     this->Bind(wxEVT_ACTIVATE, &Animatica::OnActivate, this);
 }
@@ -36,9 +35,9 @@ Animatica::~Animatica(){
     delete this->animate_gif;
 }
 
-void Animatica::OnActivate(wxActivateEvent& event){
+void Animatica::OnActivate(wxActivateEvent &event){
     if (!event.GetActive()){
-        this->mod_main_window->TopWindow();
+          this->mod_main_window->TopWindow();
     }
     
     event.Skip();
@@ -56,6 +55,7 @@ wxString Animatica::GetFullDirPath(const char *folder, const char *name, const c
 void Animatica::SetInitVectorGif(){
     this->vec_name_gif.push_back("evernight_1");
     this->vec_name_gif.push_back("evernight_2");
+    this->vec_name_gif.push_back("anime-dance_1");
 }
 
 void Animatica::ChangeSalutation(){
