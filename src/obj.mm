@@ -55,8 +55,17 @@
 }
 
 - (void)WindowZoom:(id)sender{
-    if (m_window != nil)
-        m_window->_CellUmFunc(TITLE_BAR_ZOOM_BUTTON);
+    NSInteger res_del = [self GetTimeNow] - self.lastVal;
+    
+    if (res_del > [self GetDoubleClickInterval] && [self GetDoubleClock] == 2){ // double click
+        m_window->_CellUmFunc(DOUBLE_CLICK_MINIMIZE);
+    }
+    else{ // one click
+        if (m_window != nil){
+            m_window->_CellUmFunc(TITLE_BAR_ZOOM_BUTTON);
+        }
+    }
+    self.lastVal = [self GetTimeNow];
 }
 @end
 
