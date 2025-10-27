@@ -43,6 +43,7 @@ public:
     void NoColorWindow();
     void TopWindow();
     void HideTitleText();
+    void HideIconApp();
     void SetTitleText(wxString);
     void SetMaxSizeWindow(wxSize);
     void SetMinSizeWindow(wxSize);

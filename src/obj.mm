@@ -99,6 +99,12 @@ void ModernizeWindow::HideTitleText(){
         [this->nsWindow setTitleVisibility:NSWindowTitleHidden];
 }
 
+void ModernizeWindow::HideIconApp(){
+    if (this->nsWindow != nil){
+        [NSApp setActivationPolicy:NSApplicationActivationPolicyAccessory];
+    }
+}
+
 void ModernizeWindow::SetTitleText(wxString name){
     if (this->nsWindow != nil)
         [this->nsWindow setTitle:[NSString stringWithUTF8String:name.utf8_str()]];
@@ -255,8 +261,24 @@ void Animate::loadGif(wxString dir){
             this->imageView = nil;
         }
         
-        this->imageView = [[NSImageView alloc] initWithFrame:this->nsWindow.contentView.bounds];
+        // This is experimental code, still testing
+        NSView *contentView = this->nsWindow.contentView;
+        NSRect bounds = contentView.bounds;
         
+        CGFloat gifHeight = 270;
+        CGFloat margin = 0;
+        
+        NSRect gifFrame = NSMakeRect(-10, margin, bounds.size.width +20, gifHeight);
+        NSArray *reps = [this->image representations];
+
+        for (NSImageRep *rep in reps) {
+            if ([rep isKindOfClass:[NSBitmapImageRep class]]) {
+                [(NSBitmapImageRep*)rep setProperty:NSImageLoopCount withValue:@0];
+            }
+        }
+        //
+        
+        this->imageView = [[NSImageView alloc] initWithFrame:gifFrame];
         this->imageView.image = this->image;
         this->imageView.animates = YES;
         this->imageView.imageScaling = NSImageScaleProportionallyUpOrDown;

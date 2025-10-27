@@ -17,6 +17,7 @@ Animatica::Animatica(const wxString title, const wxPoint point, const wxSize siz
     this->mod_main_window->NoColorWindow();
     this->mod_main_window->TopWindow();
     this->mod_main_window->SetTitleText("_");
+    this->mod_main_window->HideIconApp();
     
     this->mod_main_window->InitTitleBarButtons();
     this->mod_main_window->SetDelegateButtonMinimaze(std::bind(&Animatica::ChangeSalutation, this));
@@ -56,7 +57,10 @@ wxString Animatica::GetFullDirPath(const char *folder, const char *name, const c
 void Animatica::SetInitVectorGif(){
     this->vec_name_gif.push_back("evernight_1");
     this->vec_name_gif.push_back("evernight_2");
+    this->vec_name_gif.push_back("bocchi-1");
+    this->vec_name_gif.push_back("yunli1");
     this->vec_name_gif.push_back("anime-dance_1");
+    this->vec_name_gif.push_back("ai-oshino-ko1");
 }
 
 void Animatica::ChangeSalutation(){
