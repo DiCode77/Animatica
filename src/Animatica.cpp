@@ -58,6 +58,8 @@ void Animatica::SetInitVectorGif(){
     this->vec_name_gif.push_back("evernight_1");
     this->vec_name_gif.push_back("evernight_1_1");
     this->vec_name_gif.push_back("evernight_2");
+    this->vec_name_gif.push_back("firefly_1");
+    this->vec_name_gif.push_back("hoshino_1");
     this->vec_name_gif.push_back("bocchi-1");
     this->vec_name_gif.push_back("yunli1");
     this->vec_name_gif.push_back("anime-dance_1");
