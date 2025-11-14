@@ -65,6 +65,7 @@ void Animatica::SetInitVectorGif(){
     this->vec_name_gif.push_back("anime-dance_1");
     this->vec_name_gif.push_back("ai-oshino-ko1");
     this->vec_name_gif.push_back("animat_1");
+    this->vec_name_gif.push_back("mahiro1");
 }
 
 void Animatica::ChangeSalutation(){
