@@ -7,7 +7,7 @@
 
 #include "Animatica.hpp"
 
-Animatica::Animatica(const wxString title, const wxPoint point, const wxSize size) : wxFrame(nullptr, wxID_ANY, title, point, size){
+Animatica::Animatica(wxWindow *frame, const wxString title, const wxPoint point, const wxSize size) : wxFrame(frame, wxID_ANY, title, point, size){
     this->SetMinSize(this->GetSize());
     this->SetMaxSize(this->GetSize());
     this->SetInitVectorGif();
@@ -30,6 +30,8 @@ Animatica::Animatica(const wxString title, const wxPoint point, const wxSize siz
     
     this->Bind(wxEVT_MAXIMIZE, &Animatica::DoubleClickingTitleBar, this);
     this->Bind(wxEVT_ACTIVATE, &Animatica::OnActivate, this);
+    this->Bind(wxEVT_RIGHT_DOWN, &Animatica::OnRightClicking, this);
+    this->Bind(wxEVT_MENU, &Animatica::OnCloneFrame, this, ANCA_MENU_CLONE);
 }
 
 Animatica::~Animatica(){
@@ -66,6 +68,16 @@ void Animatica::SetInitVectorGif(){
     this->vec_name_gif.push_back("ai-oshino-ko1");
     this->vec_name_gif.push_back("animat_1");
     this->vec_name_gif.push_back("mahiro1");
+}
+
+void Animatica::OnRightClicking(wxMouseEvent &event){
+    wxMenu menu;
+    menu.Append(ANCA_MENU_CLONE, "Clone");
+    PopupMenu(&menu, event.GetPosition());
+}
+
+void Animatica::OnCloneFrame(wxCommandEvent&){
+    (new Animatica(nullptr, this->GetTitle(), this->GetPosition() + wxPoint(100, 100), this->GetSize()))->Show();
 }
 
 void Animatica::ChangeSalutation(){
