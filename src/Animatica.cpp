@@ -32,6 +32,7 @@ Animatica::Animatica(wxWindow *frame, const wxString title, const wxPoint point,
     this->Bind(wxEVT_ACTIVATE, &Animatica::OnActivate, this);
     this->Bind(wxEVT_RIGHT_DOWN, &Animatica::OnRightClicking, this);
     this->Bind(wxEVT_MENU, &Animatica::OnCloneFrame, this, ANCA_MENU_CLONE);
+    this->Bind(wxEVT_MENU, &Animatica::OnCloseFrame, this, ANCA_MENU_CLOSE);
 }
 
 Animatica::~Animatica(){
@@ -73,11 +74,16 @@ void Animatica::SetInitVectorGif(){
 void Animatica::OnRightClicking(wxMouseEvent &event){
     wxMenu menu;
     menu.Append(ANCA_MENU_CLONE, "Clone");
+    menu.Append(ANCA_MENU_CLOSE, "Close");
     PopupMenu(&menu, event.GetPosition());
 }
 
 void Animatica::OnCloneFrame(wxCommandEvent&){
     (new Animatica(nullptr, this->GetTitle(), this->GetPosition() + wxPoint(100, 100), this->GetSize()))->Show();
+}
+
+void Animatica::OnCloseFrame(wxCommandEvent&){
+    this->Close();
 }
 
 void Animatica::ChangeSalutation(){

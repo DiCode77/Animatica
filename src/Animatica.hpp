@@ -20,7 +20,8 @@
 constexpr const char *APP_VERSION = "0.0.2";
 
 enum{
-    ANCA_MENU_CLONE
+    ANCA_MENU_CLONE,
+    ANCA_MENU_CLOSE
 };
 
 class Animatica : public wxFrame{
@@ -48,6 +49,7 @@ private:
     void SetInitVectorGif();
     void OnRightClicking(wxMouseEvent&);
     void OnCloneFrame(wxCommandEvent&);
+    void OnCloseFrame(wxCommandEvent&);
 };
 
 #endif /* Animatica_hpp */
